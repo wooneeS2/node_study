@@ -11,10 +11,8 @@ http
 
     res.setHeader("Content-Type", "text/html");
 
-    if (path === "/user") {
-      user(req, res);
-    } else if (path === "/feed") {
-      feed(req, res);
+    if (path in urlMap) {
+      urlMap[path](req, res);
     } else {
       res.statusCode = 404;
       notFound(req, res);
@@ -23,7 +21,8 @@ http
   .listen("3000", () => console.log("Make router!"));
 
 const user = (req, res) => {
-  res.end("[user] name : andy, age:30");
+  const userInfo = url.parse(req.url, true).query;
+  res.end(`[user] name: ${userInfo.name}, age: ${userInfo.age}`);
 };
 
 const feed = (req, res) => {
@@ -32,4 +31,10 @@ const feed = (req, res) => {
 
 const notFound = (req, res) => {
   res.end("404 page not found");
+};
+
+const urlMap = {
+  "/": (req, res) => res.end("HOME"),
+  "/user": user,
+  "/feed": feed,
 };
