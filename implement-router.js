@@ -11,6 +11,7 @@ http
 
     res.setHeader("Content-Type", "text/html");
 
+    //객체 안에 키가 있는지 검사
     if (path in urlMap) {
       urlMap[path](req, res);
     } else {
